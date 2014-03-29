@@ -1,0 +1,4 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RuleSet Name="WinAPI.NET Rules" Description="This rule set contains code analysis rules for the WinAPI.NET library assemblies." ToolsVersion="12.0">
+  <IncludeAll Action="Warning" />
+</RuleSet>
