@@ -1,0 +1,11 @@
+*.suo
+*.user
+*.dotCover
+*.exe
+*.msi
+*_ReSharper.*
+bin
+obj
+TestResults
+TestResult.xml
+StyleCop.Cache
