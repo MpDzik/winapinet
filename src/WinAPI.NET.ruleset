@@ -1,4 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <RuleSet Name="WinAPI.NET Rules" Description="This rule set contains code analysis rules for the WinAPI.NET library assemblies." ToolsVersion="12.0">
   <IncludeAll Action="Warning" />
+  <Rules AnalyzerId="Microsoft.Analyzers.ManagedCodeAnalysis" RuleNamespace="Microsoft.Rules.Managed">
+    <Rule Id="CA1020" Action="None" />
+    <Rule Id="CA1021" Action="None" />
+    <Rule Id="CA1028" Action="None" />
+    <Rule Id="CA1045" Action="None" />
+    <Rule Id="CA1060" Action="None" />
+    <Rule Id="CA1401" Action="None" />
+    <Rule Id="CA1704" Action="None" />
+    <Rule Id="CA1707" Action="None" />
+    <Rule Id="CA1709" Action="None" />
+    <Rule Id="CA1726" Action="None" />
+  </Rules>
 </RuleSet>
