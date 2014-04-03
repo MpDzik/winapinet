@@ -4,6 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
@@ -15,3 +16,6 @@ using System.Runtime.InteropServices;
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("01efe7d3-2f81-420a-9ba7-290c1d5554e4")]
+
+// Assembly is CLS-compliant
+[assembly: CLSCompliant(true)]
