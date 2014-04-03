@@ -45,7 +45,13 @@
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Handles\DuplicateHandleOptions.cs" />
+    <Compile Include="Handles\HandleFlags.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Handles\SafeTokenHandle.cs" />
+    <Compile Include="WinBoolean.cs" />
+    <Compile Include="Handles\WinHandle.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\WinAPI.NET.pfx">
