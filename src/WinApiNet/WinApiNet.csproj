@@ -83,6 +83,13 @@
     <Compile Include="Console\StandardDevice.cs" />
     <Compile Include="Console\WinConsole.cs" />
     <Compile Include="Console\WindowBufferSizeRecord.cs" />
+    <Compile Include="ErrorHandling\ExceptionRecord.cs" />
+    <Compile Include="ErrorHandling\FlashFlags.cs" />
+    <Compile Include="ErrorHandling\FlashWndInfo.cs" />
+    <Compile Include="ErrorHandling\FormatMessageFlags.cs" />
+    <Compile Include="ErrorHandling\MessageBeepType.cs" />
+    <Compile Include="ErrorHandling\ProcessErrorMode.cs" />
+    <Compile Include="ErrorHandling\WinError.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Handles\DuplicateHandleOptions.cs" />
     <Compile Include="Handles\HandleFlags.cs" />
