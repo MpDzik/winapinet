@@ -15,6 +15,11 @@ namespace WinApiNet.Console
     public struct ColorRef
     {
         /// <summary>
+        /// This must be always zero.
+        /// </summary>
+        public byte Reserved;
+
+        /// <summary>
         /// The intensity of the red color.
         /// </summary>
         public byte R;
@@ -28,5 +33,14 @@ namespace WinApiNet.Console
         /// The intensity of the blue color.
         /// </summary>
         public byte B;
+
+        /// <summary>
+        /// Returns a <see cref="string" /> that represents this instance.
+        /// </summary>
+        /// <returns>A <see cref="string" /> that represents this instance.</returns>
+        public override string ToString()
+        {
+            return "COLORREF { R=" + this.R + ", G=" + this.G + ", B=" + this.B + " }";
+        }
     }
 }

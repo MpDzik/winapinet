@@ -15,19 +15,19 @@ namespace WinApiNet.Console
     public class ConsoleHistoryInfo
     {
         /// <summary>
-        /// The size of the structure, in bytes. Set this member to sizeof(CONSOLE_HISTORY_INFO).
+        /// The size of the structure, in bytes.
         /// </summary>
-        public ushort cbSize = (ushort)Marshal.SizeOf(typeof(ConsoleHistoryInfo));
+        public uint cbSize = (ushort)Marshal.SizeOf(typeof(ConsoleHistoryInfo));
 
         /// <summary>
         /// The number of commands kept in each history buffer.
         /// </summary>
-        public ushort HistoryBufferSize;
+        public uint HistoryBufferSize;
 
         /// <summary>
         /// The number of history buffers kept for this console process.
         /// </summary>
-        public ushort NumberOfHistoryBuffers;
+        public uint NumberOfHistoryBuffers;
 
         /// <summary>
         /// This parameter can be zero or values from the <see cref="ConsoleHistoryInfoFlags"/> enumeration.

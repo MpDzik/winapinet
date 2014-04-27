@@ -251,7 +251,7 @@ namespace WinApiNet.Console
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool GetConsoleAlias(
             string lpSource,
-            out StringBuilder lpTargetBuffer,
+            [Out] StringBuilder lpTargetBuffer,
             uint targetBufferLength,
             string lpExeName);
 
@@ -307,7 +307,7 @@ namespace WinApiNet.Console
         /// </returns>
         [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
         [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern uint GetConsoleAliasExes(StringBuilder lpExeNameBuffer, uint exeNameBufferLength);
+        public static extern uint GetConsoleAliasExes([Out] StringBuilder lpExeNameBuffer, uint exeNameBufferLength);
 
         /// <summary>
         /// Retrieves the required size for the buffer used by the <see cref="GetConsoleAliasExes"/> function.
@@ -378,7 +378,7 @@ namespace WinApiNet.Console
         /// <see cref="Marshal.GetLastWin32Error"/>.
         /// </returns>
         [DllImport("kernel32.dll", SetLastError = true)]
-        public static extern Coord GetConsoleFontSize(SafeConsoleHandle hConsoleOutput, int nFont);
+        public static extern Coord GetConsoleFontSize(SafeConsoleHandle hConsoleOutput, uint nFont);
 
         /// <summary>
         /// Retrieves the history settings for the calling process's console.
@@ -393,7 +393,7 @@ namespace WinApiNet.Console
         /// </returns>
         [DllImport("kernel32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool GetConsoleHistoryInfo([In, Out] ConsoleHistoryInfo lpConsoleHistoryInfo);
+        public static extern bool GetConsoleHistoryInfo([Out] ConsoleHistoryInfo lpConsoleHistoryInfo);
 
         /// <summary>
         /// Retrieves the current input mode of a console's input buffer or the current output mode of a console
@@ -431,7 +431,7 @@ namespace WinApiNet.Console
         /// the error code.
         /// </returns>
         [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
-        public static extern uint GetConsoleOriginalTitle(out StringBuilder lpConsoleTitle, uint nSize);
+        public static extern uint GetConsoleOriginalTitle([Out] StringBuilder lpConsoleTitle, uint nSize);
 
         /// <summary>
         /// Retrieves the output code page used by the console associated with the calling process. A console uses
@@ -465,7 +465,7 @@ namespace WinApiNet.Console
         /// <see cref="Marshal.GetLastWin32Error"/>.
         /// </returns>
         [DllImport("kernel32.dll", SetLastError = true)]
-        public static extern uint GetConsoleProcessList(out uint[] lpdwProcessList, uint dwProcessCount);
+        public static extern uint GetConsoleProcessList([Out] uint[] lpdwProcessList, uint dwProcessCount);
 
         /// <summary>
         /// Retrieves information about the specified console screen buffer.
@@ -486,13 +486,14 @@ namespace WinApiNet.Console
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool GetConsoleScreenBufferInfo(
             SafeConsoleHandle hConsoleOutput,
-            [In, Out] ConsoleScreenBufferInfo lpConsoleScreenBufferInfo);
+            [Out] ConsoleScreenBufferInfo lpConsoleScreenBufferInfo);
 
         /// <summary>
         /// Retrieves extended information about the specified console screen buffer.
         /// </summary>
         /// <param name="hConsoleOutput">
-        /// [in] A handle to the console screen buffer. The handle must have the <c>GENERIC_READ</c> access right.
+        /// [in] A handle to the console screen buffer. The handle must have the <see cref="ConsoleAccess.GENERIC_READ"/>
+        /// access right.
         /// </param>
         /// <param name="lpConsoleScreenBufferInfoEx">
         /// [out] A <see cref="ConsoleScreenBufferInfoEx"/> structure that receives the requested console screen
@@ -506,7 +507,7 @@ namespace WinApiNet.Console
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool GetConsoleScreenBufferInfoEx(
             SafeConsoleHandle hConsoleOutput,
-            out ConsoleScreenBufferInfoEx lpConsoleScreenBufferInfoEx);
+            [In, Out] ConsoleScreenBufferInfoEx lpConsoleScreenBufferInfoEx);
 
         /// <summary>
         /// Retrieves information about the current console selection.
@@ -520,7 +521,7 @@ namespace WinApiNet.Console
         /// </returns>
         [DllImport("kernel32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool GetConsoleSelectionInfo([In, Out] ConsoleSelectionInfo lpConsoleSelectionInfo);
+        public static extern bool GetConsoleSelectionInfo([Out] ConsoleSelectionInfo lpConsoleSelectionInfo);
 
         /// <summary>
         /// Retrieves the title for the current console window.
@@ -555,7 +556,8 @@ namespace WinApiNet.Console
         /// Retrieves information about the current console font.
         /// </summary>
         /// <param name="hConsoleOutput">
-        /// [in] A handle to the console screen buffer. The handle must have the GENERIC_READ access right.
+        /// [in] A handle to the console screen buffer. The handle must have the <see cref="ConsoleAccess.GENERIC_READ"/>
+        /// access right.
         /// </param>
         /// <param name="bMaximumWindow">
         /// [in] If this parameter is <c>TRUE</c>, font information is retrieved for the maximum window size. If this
@@ -594,11 +596,12 @@ namespace WinApiNet.Console
         /// <c>false</c>. To get extended error information, call <see cref="Marshal.GetLastWin32Error"/>.
         /// </returns>
         [DllImport("kernel32.dll", SetLastError = true)]
+        [SuppressMessage("Microsoft.Globalization", "CA2101:SpecifyMarshalingForPInvokeStringArguments")]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool GetCurrentConsoleFontEx(
             SafeConsoleHandle hConsoleOutput,
             [MarshalAs(UnmanagedType.Bool)] bool bMaximumWindow,
-            out ConsoleFontInfoEx lpConsoleCurrentFontEx);
+            [In, Out] ConsoleFontInfoEx lpConsoleCurrentFontEx);
 
         /// <summary>
         /// Retrieves the size of the largest possible console window, based on the current font and the size of the
@@ -648,7 +651,7 @@ namespace WinApiNet.Console
         /// </returns>
         [DllImport("kernel32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool GetNumberOfConsoleMouseButtons(ref uint lpNumberOfMouseButtons);
+        public static extern bool GetNumberOfConsoleMouseButtons(out uint lpNumberOfMouseButtons);
 
         /// <summary>
         /// Retrieves a handle to the specified standard device (standard input, standard output, or standard error).

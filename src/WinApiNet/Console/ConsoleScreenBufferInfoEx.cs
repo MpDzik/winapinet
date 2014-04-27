@@ -35,7 +35,7 @@ namespace WinApiNet.Console
         /// The attributes of the characters written to a screen buffer by the <c>WriteFile</c> and <c>WriteConsole</c>
         /// functions, or echoed to a screen buffer by the <c>ReadFile</c> and <c>ReadConsole</c> functions.
         /// </summary>
-        public short wAttributes;
+        public ushort wAttributes;
 
         /// <summary>
         /// A <see cref="SmallRect"/> structure that contains the console screen buffer coordinates of the upper-left
@@ -57,6 +57,7 @@ namespace WinApiNet.Console
         /// <summary>
         /// If this member is <c>TRUE</c>, full-screen mode is supported; otherwise, it is not.
         /// </summary>
+        [MarshalAs(UnmanagedType.Bool)]
         public bool bFullscreenSupported;
 
         /// <summary>
@@ -64,5 +65,13 @@ namespace WinApiNet.Console
         /// </summary>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
         public ColorRef[] ColorTable;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ConsoleScreenBufferInfoEx"/> class.
+        /// </summary>
+        public ConsoleScreenBufferInfoEx()
+        {
+            this.ColorTable = new ColorRef[16];
+        }
     }
 }

@@ -15,6 +15,11 @@ namespace WinApiNet.Console
     public enum ConsoleDisplayMode : uint
     {
         /// <summary>
+        /// No display mode.
+        /// </summary>
+        NONE = 0x0,
+
+        /// <summary>
         /// Full-screen console. The console is in this mode as soon as the window is maximized. At this point, the
         /// transition to full-screen mode can still fail.
         /// </summary>

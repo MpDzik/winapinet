@@ -33,5 +33,19 @@ namespace WinApiNet.Console
         /// The y-coordinate of the lower right corner of the rectangle.
         /// </summary>
         public short Bottom;
+
+        /// <summary>
+        /// Returns a <see cref="string" /> that represents this instance.
+        /// </summary>
+        /// <returns>A <see cref="string" /> that represents this instance.</returns>
+        public override string ToString()
+        {
+            return "SMALLRECT { " + 
+                "Left=" + this.Left + 
+                ", Top=" + this.Top + 
+                ", Right=" + this.Right + 
+                ", Bottom=" + this.Bottom + 
+                " }";
+        }
     }
 }
