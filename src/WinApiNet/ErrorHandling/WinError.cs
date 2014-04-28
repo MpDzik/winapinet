@@ -216,6 +216,21 @@ namespace WinApiNet.ErrorHandling
         }
 
         /// <summary>
+        /// Throws a <see cref="Win32Exception"/> with the current error code returned by
+        /// <see cref="Marshal.GetLastWin32Error"/>.
+        /// </summary>
+        /// <param name="result">
+        /// The result of the method call. Exception will be thrown if <paramref name="result"/> is <c>false</c>.
+        /// </param>
+        public static void ThrowLastWin32ErrorIfFailed(bool result)
+        {
+            if (!result)
+            {
+                throw new Win32Exception(Marshal.GetLastWin32Error());
+            }
+        }
+
+        /// <summary>
         /// Retrieves the error mode for the current process.
         /// </summary>
         /// <returns>The process error mode.</returns>
