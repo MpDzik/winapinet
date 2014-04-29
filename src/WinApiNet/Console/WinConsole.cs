@@ -10,6 +10,7 @@ namespace WinApiNet.Console
     using System.Diagnostics.CodeAnalysis;
     using System.Runtime.InteropServices;
     using System.Text;
+    using WinApiNet.ErrorHandling;
     using WinApiNet.Handles;
     using WinApiNet.Security;
 
@@ -25,7 +26,7 @@ namespace WinApiNet.Console
         public const uint ATTACH_PARENT_PROCESS = 0x0ffffffff;
 
         /// <summary>
-        /// Error code used by <see cref="WriteConsole"/> method.
+        /// Error code used by <c>WriteConsole</c> method.
         /// </summary>
         public const int ERROR_NOT_ENOUGH_MEMORY = 0x8;
 
@@ -108,7 +109,7 @@ namespace WinApiNet.Console
         public static extern SafeConsoleHandle CreateConsoleScreenBuffer(
              ConsoleAccess dwDesiredAccess,
              ConsoleShareMode dwShareMode,
-             [In, Out] SecurityAttributes lpSecurityAttributes,
+             [In] SecurityAttributes lpSecurityAttributes,
              ConsoleBufferFlags dwFlags,
              IntPtr lpScreenBufferData);
 
@@ -147,6 +148,37 @@ namespace WinApiNet.Console
             out uint lpNumberOfAttrsWritten);
 
         /// <summary>
+        /// Sets the character attributes for a specified number of character cells, beginning at the specified
+        /// coordinates in a screen buffer.
+        /// </summary>
+        /// <param name="hConsoleOutput">
+        /// [in] A handle to the console screen buffer. The handle must have the GENERIC_WRITE access right.
+        /// </param>
+        /// <param name="wAttribute">
+        /// [in] The attributes to use when writing to the console screen buffer.
+        /// </param>
+        /// <param name="nLength">
+        /// [in] The number of character cells to be set to the specified color attributes.
+        /// </param>
+        /// <param name="dwWriteCoord">
+        /// [in] A <see cref="Coord"/> structure that specifies the character coordinates of the first cell whose
+        /// attributes are to be set.
+        /// </param>
+        /// <returns>The number of character cells whose attributes were actually set.</returns>
+        public static uint FillConsoleOutputAttribute(
+            SafeConsoleHandle hConsoleOutput,
+            CharacterAttributes wAttribute,
+            uint nLength,
+            Coord dwWriteCoord)
+        {
+            uint lpNumberOfAttrsWritten;
+            WinError.ThrowLastWin32ErrorIfFailed(
+                FillConsoleOutputAttribute(hConsoleOutput, wAttribute, nLength, dwWriteCoord, out lpNumberOfAttrsWritten));
+
+            return lpNumberOfAttrsWritten;
+        }
+
+        /// <summary>
         /// Writes a character to the console screen buffer a specified number of times, beginning at the specified
         /// coordinates.
         /// </summary>
@@ -180,6 +212,38 @@ namespace WinApiNet.Console
             uint nLength,
             Coord dwWriteCoord,
             out uint lpNumberOfCharsWritten);
+
+        /// <summary>
+        /// Writes a character to the console screen buffer a specified number of times, beginning at the specified
+        /// coordinates.
+        /// </summary>
+        /// <param name="hConsoleOutput">
+        /// [in] A handle to the console screen buffer. The handle must have the <see cref="ConsoleAccess.GENERIC_WRITE"/>
+        /// access right.
+        /// </param>
+        /// <param name="cCharacter">
+        /// [in] The character to be written to the console screen buffer.
+        /// </param>
+        /// <param name="nLength">
+        /// [in] The number of character cells to which the character should be written.
+        /// </param>
+        /// <param name="dwWriteCoord">
+        /// [in] A <see cref="Coord"/> structure that specifies the character coordinates of the first cell to which
+        /// the character is to be written.
+        /// </param>
+        /// <returns>The number of characters actually written to the console screen buffer.</returns>
+        public static uint FillConsoleOutputCharacter(
+            SafeConsoleHandle hConsoleOutput,
+            char cCharacter,
+            uint nLength,
+            Coord dwWriteCoord)
+        {
+            uint lpNumberOfCharsWritten;
+            WinError.ThrowLastWin32ErrorIfFailed(
+                FillConsoleOutputCharacter(hConsoleOutput, cCharacter, nLength, dwWriteCoord, out lpNumberOfCharsWritten));
+
+            return lpNumberOfCharsWritten;
+        }
 
         /// <summary>
         /// Flushes the console input buffer. All input records currently in the input buffer are discarded.
@@ -256,6 +320,31 @@ namespace WinApiNet.Console
             string lpExeName);
 
         /// <summary>
+        /// Gets the console alias.
+        /// </summary>
+        /// <param name="lpSource">
+        /// [in] The console alias whose text is to be retrieved.
+        /// </param>
+        /// <param name="lpExeName">
+        /// [in] The name of the executable file.
+        /// </param>
+        /// <param name="targetBufferLength">
+        /// [in, optional] The size of the output buffer, in bytes.
+        /// </param>
+        /// <returns>The text associated with the console alias.</returns>
+        public static string GetConsoleAlias(
+            string lpSource,
+            string lpExeName,
+            uint targetBufferLength = 1024)
+        {
+            var lpTargetBuffer = new StringBuilder((int)targetBufferLength);
+            WinError.ThrowLastWin32ErrorIfFailed(
+                GetConsoleAlias(lpSource, lpTargetBuffer, targetBufferLength, lpExeName));
+
+            return lpTargetBuffer.ToString();
+        }
+
+        /// <summary>
         /// Retrieves all defined console aliases for the specified executable.
         /// </summary>
         /// <param name="lpAliasBuffer">
@@ -307,10 +396,25 @@ namespace WinApiNet.Console
         /// </returns>
         [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
         [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern uint GetConsoleAliasExes([Out] StringBuilder lpExeNameBuffer, uint exeNameBufferLength);
+        public static extern bool GetConsoleAliasExes([Out] StringBuilder lpExeNameBuffer, uint exeNameBufferLength);
 
         /// <summary>
-        /// Retrieves the required size for the buffer used by the <see cref="GetConsoleAliasExes"/> function.
+        /// Retrieves the names of all executable files with console aliases defined.
+        /// </summary>
+        /// <param name="exeNameBufferLength">
+        /// [in, optional] The size of the output buffer, in bytes.
+        /// </param>
+        /// <returns>A buffer that receives the names of the executable files.</returns>
+        public static string GetConsoleAliasExes(uint exeNameBufferLength = 1024)
+        {
+            var lpExeNameBuffer = new StringBuilder((int)exeNameBufferLength);
+            WinError.ThrowLastWin32ErrorIfFailed(GetConsoleAliasExes(lpExeNameBuffer, exeNameBufferLength));
+
+            return lpExeNameBuffer.ToString();
+        }
+
+        /// <summary>
+        /// Retrieves the required size for the buffer used by the <c>GetConsoleAliasExes</c> function.
         /// </summary>
         /// <returns>
         /// The size of the buffer required to store the names of all executable files that have console aliases
@@ -348,6 +452,25 @@ namespace WinApiNet.Console
             [In, Out] ConsoleCursorInfo lpConsoleCursorInfo);
 
         /// <summary>
+        /// Retrieves information about the size and visibility of the cursor for the specified console screen buffer.
+        /// </summary>
+        /// <param name="hConsoleOutput">
+        /// [in] A handle to the console screen buffer. The handle must have the <c>GENERIC_READ</c> access right.
+        /// </param>
+        /// <returns>
+        /// A pointer to a <see cref="ConsoleCursorInfo"/> structure that receives information about the console's
+        /// cursor.
+        /// </returns>
+        public static ConsoleCursorInfo GetConsoleCursorInfo(SafeConsoleHandle hConsoleOutput)
+        {
+            var lpConsoleCursorInfo = new ConsoleCursorInfo();
+            WinError.ThrowLastWin32ErrorIfFailed(
+                GetConsoleCursorInfo(hConsoleOutput, lpConsoleCursorInfo));
+
+            return lpConsoleCursorInfo;
+        }
+
+        /// <summary>
         /// Retrieves the display mode of the current console.
         /// </summary>
         /// <param name="lpModeFlags">
@@ -362,6 +485,18 @@ namespace WinApiNet.Console
         public static extern bool GetConsoleDisplayMode(out ConsoleDisplayMode lpModeFlags);
 
         /// <summary>
+        /// Retrieves the display mode of the current console.
+        /// </summary>
+        /// <returns>The display mode of the console.</returns>
+        public static ConsoleDisplayMode GetConsoleDisplayMode()
+        {
+            ConsoleDisplayMode lpModeFlags;
+            WinError.ThrowLastWin32ErrorIfFailed(GetConsoleDisplayMode(out lpModeFlags));
+            
+            return lpModeFlags;
+        }
+
+        /// <summary>
         /// Retrieves the size of the font used by the specified console screen buffer.
         /// </summary>
         /// <param name="hConsoleOutput">
@@ -369,7 +504,7 @@ namespace WinApiNet.Console
         /// </param>
         /// <param name="nFont">
         /// [in] The index of the font whose size is to be retrieved. This index is obtained by calling the
-        /// <see cref="GetCurrentConsoleFont"/> function.
+        /// <c>GetCurrentConsoleFont</c> function.
         /// </param>
         /// <returns>
         /// If the function succeeds, the return value is a COORD structure that contains the width and height of each
@@ -396,6 +531,20 @@ namespace WinApiNet.Console
         public static extern bool GetConsoleHistoryInfo([Out] ConsoleHistoryInfo lpConsoleHistoryInfo);
 
         /// <summary>
+        /// Retrieves the history settings for the calling process's console.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="ConsoleHistoryInfo"/> structure with the history settings for the calling process's console.
+        /// </returns>
+        public static ConsoleHistoryInfo GetConsoleHistoryInfo()
+        {
+            var lpConsoleHistoryInfo = new ConsoleHistoryInfo();
+            WinError.ThrowLastWin32ErrorIfFailed(GetConsoleHistoryInfo(lpConsoleHistoryInfo));
+
+            return lpConsoleHistoryInfo;
+        }
+
+        /// <summary>
         /// Retrieves the current input mode of a console's input buffer or the current output mode of a console
         /// screen buffer.
         /// </summary>
@@ -415,6 +564,23 @@ namespace WinApiNet.Console
         public static extern bool GetConsoleMode(SafeConsoleHandle hConsoleHandle, out ConsoleMode lpMode);
 
         /// <summary>
+        /// Retrieves the current input mode of a console's input buffer or the current output mode of a console
+        /// screen buffer.
+        /// </summary>
+        /// <param name="hConsoleHandle">
+        /// [in] A handle to the console input buffer or the console screen buffer. The handle must have the 
+        /// <c>GENERIC_READ</c> access right.
+        /// </param>
+        /// <returns>The current mode of the specified buffer.</returns>
+        public static ConsoleMode GetConsoleMode(SafeConsoleHandle hConsoleHandle)
+        {
+            ConsoleMode lpMode;
+            WinError.ThrowLastWin32ErrorIfFailed(GetConsoleMode(hConsoleHandle, out lpMode));
+
+            return lpMode;
+        }
+
+        /// <summary>
         /// Retrieves the original title for the current console window.
         /// </summary>
         /// <param name="lpConsoleTitle">
@@ -432,6 +598,27 @@ namespace WinApiNet.Console
         /// </returns>
         [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
         public static extern uint GetConsoleOriginalTitle([Out] StringBuilder lpConsoleTitle, uint nSize);
+
+        /// <summary>
+        /// Retrieves the original title for the current console window.
+        /// </summary>
+        /// <param name="nSize">
+        /// [in, optional] The size of the output buffer, in characters.
+        /// </param>
+        /// <returns>
+        /// A pointer to a buffer that receives a null-terminated string containing the original title.
+        /// </returns>
+        public static string GetConsoleOriginalTitle(uint nSize = 1024)
+        {
+            var lpConsoleTitle = new StringBuilder((int)nSize);
+            uint result = GetConsoleOriginalTitle(lpConsoleTitle, nSize);
+            if (result == 0)
+            {
+                WinError.ThrowLastWin32Error();
+            }
+
+            return lpConsoleTitle.ToString();
+        }
 
         /// <summary>
         /// Retrieves the output code page used by the console associated with the calling process. A console uses
@@ -489,6 +676,25 @@ namespace WinApiNet.Console
             [Out] ConsoleScreenBufferInfo lpConsoleScreenBufferInfo);
 
         /// <summary>
+        /// Retrieves information about the specified console screen buffer.
+        /// </summary>
+        /// <param name="hConsoleOutput">
+        /// [in] A handle to the console screen buffer. The handle must have the <see cref="ConsoleAccess.GENERIC_READ"/>
+        /// access right.
+        /// </param>
+        /// <returns>
+        /// A <see cref="ConsoleScreenBufferInfo"/> structure that receives the console screen buffer information.
+        /// </returns>
+        public static ConsoleScreenBufferInfo GetConsoleScreenBufferInfo(SafeConsoleHandle hConsoleOutput)
+        {
+            var lpConsoleScreenBufferInfo = new ConsoleScreenBufferInfo();
+            WinError.ThrowLastWin32ErrorIfFailed(
+                GetConsoleScreenBufferInfo(hConsoleOutput, lpConsoleScreenBufferInfo));
+
+            return lpConsoleScreenBufferInfo;
+        }
+
+        /// <summary>
         /// Retrieves extended information about the specified console screen buffer.
         /// </summary>
         /// <param name="hConsoleOutput">
@@ -510,6 +716,26 @@ namespace WinApiNet.Console
             [In, Out] ConsoleScreenBufferInfoEx lpConsoleScreenBufferInfoEx);
 
         /// <summary>
+        /// Retrieves extended information about the specified console screen buffer.
+        /// </summary>
+        /// <param name="hConsoleOutput">
+        /// [in] A handle to the console screen buffer. The handle must have the <see cref="ConsoleAccess.GENERIC_READ"/>
+        /// access right.
+        /// </param>
+        /// <returns>
+        /// A <see cref="ConsoleScreenBufferInfoEx"/> structure that receives the requested console screen buffer
+        /// information.
+        /// </returns>
+        public static ConsoleScreenBufferInfoEx GetConsoleScreenBufferInfoEx(SafeConsoleHandle hConsoleOutput)
+        {
+            var lpConsoleScreenBufferInfoEx = new ConsoleScreenBufferInfoEx();
+            WinError.ThrowLastWin32ErrorIfFailed(
+                GetConsoleScreenBufferInfoEx(hConsoleOutput, lpConsoleScreenBufferInfoEx));
+
+            return lpConsoleScreenBufferInfoEx;
+        }
+
+        /// <summary>
         /// Retrieves information about the current console selection.
         /// </summary>
         /// <param name="lpConsoleSelectionInfo">
@@ -522,6 +748,20 @@ namespace WinApiNet.Console
         [DllImport("kernel32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool GetConsoleSelectionInfo([Out] ConsoleSelectionInfo lpConsoleSelectionInfo);
+
+        /// <summary>
+        /// Retrieves information about the current console selection.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="ConsoleSelectionInfo"/> structure that receives the selection information.
+        /// </returns>
+        public static ConsoleSelectionInfo GetConsoleSelectionInfo()
+        {
+            var lpConsoleSelectionInfo = new ConsoleSelectionInfo();
+            WinError.ThrowLastWin32ErrorIfFailed(GetConsoleSelectionInfo(lpConsoleSelectionInfo));
+
+            return lpConsoleSelectionInfo;
+        }
 
         /// <summary>
         /// Retrieves the title for the current console window.
@@ -541,6 +781,29 @@ namespace WinApiNet.Console
         /// </returns>
         [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
         public static extern uint GetConsoleTitle([Out] StringBuilder lpConsoleTitle, uint nSize);
+
+        /// <summary>
+        /// Retrieves the title for the current console window.
+        /// </summary>
+        /// <param name="nSize">
+        /// [in, optional] The size of the buffer parameter, in characters.
+        /// </param>
+        /// <returns>
+        /// A pointer to a buffer that receives a null-terminated string containing the title. If the buffer is too
+        /// small to store the title, the function stores as many characters of the title as will fit in the buffer,
+        /// ending with a null terminator.
+        /// </returns>
+        public static string GetConsoleTitle(uint nSize = 1024)
+        {
+            var lpConsoleTitle = new StringBuilder((int)nSize);
+            uint result = GetConsoleTitle(lpConsoleTitle, nSize);
+            if (result == 0)
+            {
+                WinError.ThrowLastWin32Error();
+            }
+
+            return lpConsoleTitle.ToString();
+        }
 
         /// <summary>
         /// Retrieves the window handle used by the console associated with the calling process.
@@ -578,6 +841,29 @@ namespace WinApiNet.Console
             [In, Out] ConsoleFontInfo lpConsoleCurrentFont);
 
         /// <summary>
+        /// Retrieves information about the current console font.
+        /// </summary>
+        /// <param name="hConsoleOutput">
+        /// [in] A handle to the console screen buffer. The handle must have the <see cref="ConsoleAccess.GENERIC_READ"/>
+        /// access right.
+        /// </param>
+        /// <param name="bMaximumWindow">
+        /// [in] If this parameter is <c>TRUE</c>, font information is retrieved for the maximum window size. If this
+        /// parameter is <c>FALSE</c>, font information is retrieved for the current window size.
+        /// </param>
+        /// <returns>
+        /// A <see cref="ConsoleFontInfo"/> structure that receives the requested font information.
+        /// </returns>
+        public static ConsoleFontInfo GetCurrentConsoleFont(SafeConsoleHandle hConsoleOutput, bool bMaximumWindow)
+        {
+            var lpConsoleCurrentFont = new ConsoleFontInfo();
+            WinError.ThrowLastWin32ErrorIfFailed(
+                GetCurrentConsoleFont(hConsoleOutput, bMaximumWindow, lpConsoleCurrentFont));
+
+            return lpConsoleCurrentFont;
+        }
+
+        /// <summary>
         /// Retrieves extended information about the current console font.
         /// </summary>
         /// <param name="hConsoleOutput">
@@ -602,6 +888,28 @@ namespace WinApiNet.Console
             SafeConsoleHandle hConsoleOutput,
             [MarshalAs(UnmanagedType.Bool)] bool bMaximumWindow,
             [In, Out] ConsoleFontInfoEx lpConsoleCurrentFontEx);
+
+        /// <summary>
+        /// Retrieves extended information about the current console font.
+        /// </summary>
+        /// <param name="hConsoleOutput">
+        /// [in] A handle to the console screen buffer. The handle must have the GENERIC_READ access right.
+        /// </param>
+        /// <param name="bMaximumWindow">
+        /// [in] If this parameter is <c>TRUE</c>, font information is retrieved for the maximum window size. If this
+        /// parameter is <c>FALSE</c>, font information is retrieved for the current window size.
+        /// </param>
+        /// <returns>
+        /// A <see cref="ConsoleFontInfoEx"/> structure that receives the requested font information.
+        /// </returns>
+        public static ConsoleFontInfoEx GetCurrentConsoleFontEx(SafeConsoleHandle hConsoleOutput, bool bMaximumWindow)
+        {
+            var lpConsoleCurrentFontEx = new ConsoleFontInfoEx();
+            WinError.ThrowLastWin32ErrorIfFailed(
+                GetCurrentConsoleFontEx(hConsoleOutput, bMaximumWindow, lpConsoleCurrentFontEx));
+
+            return lpConsoleCurrentFontEx;
+        }
 
         /// <summary>
         /// Retrieves the size of the largest possible console window, based on the current font and the size of the
@@ -640,6 +948,21 @@ namespace WinApiNet.Console
             out uint lpcNumberOfEvents);
 
         /// <summary>
+        /// Retrieves the number of unread input records in the console's input buffer.
+        /// </summary>
+        /// <param name="hConsoleInput">
+        /// [in] A handle to the console input buffer. The handle must have the <c>GENERIC_READ</c> access right.
+        /// </param>
+        /// <returns>The number of unread input records in the console's input buffer.</returns>
+        public static uint GetNumberOfConsoleInputEvents(SafeConsoleHandle hConsoleInput)
+        {
+            uint lpcNumberOfEvents;
+            WinError.ThrowLastWin32ErrorIfFailed(GetNumberOfConsoleInputEvents(hConsoleInput, out lpcNumberOfEvents));
+
+            return lpcNumberOfEvents;
+        }
+
+        /// <summary>
         /// Retrieves the number of buttons on the mouse used by the current console.
         /// </summary>
         /// <param name="lpNumberOfMouseButtons">
@@ -652,6 +975,18 @@ namespace WinApiNet.Console
         [DllImport("kernel32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool GetNumberOfConsoleMouseButtons(out uint lpNumberOfMouseButtons);
+
+        /// <summary>
+        /// Retrieves the number of buttons on the mouse used by the current console.
+        /// </summary>
+        /// <returns>The number of mouse buttons.</returns>
+        public static uint GetNumberOfConsoleMouseButtons()
+        {
+            uint lpNumberOfMouseButtons;
+            WinError.ThrowLastWin32ErrorIfFailed(GetNumberOfConsoleMouseButtons(out lpNumberOfMouseButtons));
+
+            return lpNumberOfMouseButtons;
+        }
 
         /// <summary>
         /// Retrieves a handle to the specified standard device (standard input, standard output, or standard error).
@@ -701,6 +1036,31 @@ namespace WinApiNet.Console
             out uint lpNumberOfEventsRead);
 
         /// <summary>
+        /// Reads data from the specified console input buffer without removing it from the buffer.
+        /// </summary>
+        /// <param name="hConsoleInput">
+        /// [in] A handle to the console input buffer. The handle must have the <see cref="ConsoleAccess.GENERIC_READ"/>
+        /// access right.
+        /// </param>
+        /// <param name="nLength">
+        /// [in] The size of the buffers array, in array elements.
+        /// </param>
+        /// <returns>
+        /// An array of <see cref="InputRecord"/> structures that receives the input buffer data.
+        /// </returns>
+        public static InputRecord[] PeekConsoleInput(SafeConsoleHandle hConsoleInput, uint nLength)
+        {
+            var lpBuffer = new InputRecord[nLength];
+            uint lpNumberOfEventsRead;
+            WinError.ThrowLastWin32ErrorIfFailed(
+                PeekConsoleInput(hConsoleInput, lpBuffer, nLength, out lpNumberOfEventsRead));
+
+            Array.Resize(ref lpBuffer, (int)lpNumberOfEventsRead);
+            
+            return lpBuffer;
+        }
+
+        /// <summary>
         /// Reads character input from the console input buffer and removes it from the buffer.
         /// </summary>
         /// <param name="hConsoleInput">
@@ -734,6 +1094,34 @@ namespace WinApiNet.Console
             [In] ReadConsoleControl pInputControl);
 
         /// <summary>
+        /// Reads character input from the console input buffer and removes it from the buffer.
+        /// </summary>
+        /// <param name="hConsoleInput">
+        /// [in] A handle to the console input buffer. The handle must have the <see cref="ConsoleAccess.GENERIC_READ"/>
+        /// access right.
+        /// </param>
+        /// <param name="nNumberOfCharsToRead">
+        /// [in] The number of characters to be read.
+        /// </param>
+        /// <param name="pInputControl">
+        /// A pointer to a <see cref="ReadConsoleControl"/> structure that specifies a control character to signal
+        /// the end of the read operation. This parameter can be <c>null</c>.
+        /// </param>
+        /// <returns>The data read from the console input buffer.</returns>
+        public static string ReadConsole(
+            SafeConsoleHandle hConsoleInput,
+            uint nNumberOfCharsToRead,
+            ReadConsoleControl pInputControl)
+        {
+            uint lpNumberOfCharsRead;
+            var lpBuffer = new StringBuilder();
+            WinError.ThrowLastWin32ErrorIfFailed(
+                ReadConsole(hConsoleInput, lpBuffer, nNumberOfCharsToRead, out lpNumberOfCharsRead, pInputControl));
+
+            return lpBuffer.ToString();
+        }
+
+        /// <summary>
         /// Reads data from a console input buffer and removes it from the buffer.
         /// </summary>
         /// <param name="hConsoleInput">
@@ -741,7 +1129,7 @@ namespace WinApiNet.Console
         /// access right.
         /// </param>
         /// <param name="lpBuffer">
-        /// [out] A pointer to an array of INPUT_RECORD structures that receives the input buffer data.
+        /// [out] A pointer to an array of <see cref="InputRecord"/> structures that receives the input buffer data.
         /// </param>
         /// <param name="nLength">
         /// [in] The size of the array pointed to by the <paramref name="lpBuffer"/> parameter, in array elements.
@@ -753,13 +1141,40 @@ namespace WinApiNet.Console
         /// If the function succeeds, the return value is <c>true</c>. If the function fails, the return value is
         /// <c>false</c>. To get extended error information, call <see cref="Marshal.GetLastWin32Error"/>.
         /// </returns>
-        [DllImport("kernel32.dll", EntryPoint = "ReadConsoleInputW", CharSet = CharSet.Unicode)]
+        [DllImport("kernel32.dll", CharSet = CharSet.Unicode)]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool ReadConsoleInput(
             SafeConsoleHandle hConsoleInput,
             [Out] InputRecord[] lpBuffer,
             uint nLength,
             out uint lpNumberOfEventsRead);
+
+        /// <summary>
+        /// Reads data from a console input buffer and removes it from the buffer.
+        /// </summary>
+        /// <param name="hConsoleInput">
+        /// [in] A handle to the console input buffer. The handle must have the <see cref="ConsoleAccess.GENERIC_READ"/>
+        /// access right.
+        /// </param>
+        /// <param name="nLength">
+        /// [in] The size of the array buffer, in array elements.
+        /// </param>
+        /// <returns>
+        /// An array of <see cref="InputRecord"/> structures that receives the input buffer data.
+        /// </returns>
+        public static InputRecord[] ReadConsoleInput(
+            SafeConsoleHandle hConsoleInput,
+            uint nLength)
+        {
+            uint lpNumberOfEventsRead;
+            var lpBuffer = new InputRecord[nLength];
+            WinError.ThrowLastWin32ErrorIfFailed(
+                ReadConsoleInput(hConsoleInput, lpBuffer, nLength, out lpNumberOfEventsRead));
+
+            Array.Resize(ref lpBuffer, (int)lpNumberOfEventsRead);
+
+            return lpBuffer;
+        }
 
         /// <summary>
         /// Reads character and color attribute data from a rectangular block of character cells in a console screen
@@ -837,6 +1252,37 @@ namespace WinApiNet.Console
             out uint lpNumberOfAttrsRead);
 
         /// <summary>
+        /// Copies a specified number of character attributes from consecutive cells of a console screen buffer,
+        /// beginning at a specified location.
+        /// </summary>
+        /// <param name="hConsoleOutput">
+        /// [in] A handle to the console screen buffer. The handle must have the <see cref="ConsoleAccess.GENERIC_READ"/>
+        /// access right.
+        /// </param>
+        /// <param name="nLength">
+        /// [in] The number of screen buffer character cells from which to read.
+        /// </param>
+        /// <param name="dwReadCoord">
+        /// [in] The coordinates of the first cell in the console screen buffer from which to read, in characters.
+        /// The X member of the <see cref="Coord"/> structure is the column, and the Y member is the row.
+        /// </param>
+        /// <returns>The buffer that receives the attributes being used by the console screen buffer.</returns>
+        public static ushort[] ReadConsoleOutputAttribute(
+            SafeConsoleHandle hConsoleOutput,
+            uint nLength,
+            Coord dwReadCoord)
+        {
+            uint lpNumberOfAttrsRead;
+            var lpAttribute = new ushort[nLength];
+            WinError.ThrowLastWin32ErrorIfFailed(
+                ReadConsoleOutputAttribute(hConsoleOutput, lpAttribute, nLength, dwReadCoord, out lpNumberOfAttrsRead));
+
+            Array.Resize(ref lpAttribute, (int)lpNumberOfAttrsRead);
+            
+            return lpAttribute;
+        }
+
+        /// <summary>
         /// Copies a number of characters from consecutive cells of a console screen buffer, beginning at a specified
         /// location.
         /// </summary>
@@ -869,6 +1315,37 @@ namespace WinApiNet.Console
             uint nLength,
             Coord dwReadCoord,
             out uint lpNumberOfCharsRead);
+
+        /// <summary>
+        /// Copies a number of characters from consecutive cells of a console screen buffer, beginning at a specified
+        /// location.
+        /// </summary>
+        /// <param name="hConsoleOutput">
+        /// [in] A handle to the console screen buffer. The handle must have the <see cref="ConsoleAccess.GENERIC_READ"/>
+        /// access right.
+        /// </param>
+        /// <param name="nLength">
+        /// [in] The number of screen buffer character cells from which to read.
+        /// </param>
+        /// <param name="dwReadCoord">
+        /// [in] The coordinates of the first cell in the console screen buffer from which to read, in characters.
+        /// The X member of the <see cref="Coord"/> structure is the column, and the Y member is the row.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> containing the characters read from the console screen buffer.
+        /// </returns>
+        public static string ReadConsoleOutputCharacter(
+            SafeConsoleHandle hConsoleOutput,
+            uint nLength,
+            Coord dwReadCoord)
+        {
+            uint lpNumberOfCharsRead;
+            var lpCharacter = new StringBuilder((int)nLength);
+            WinError.ThrowLastWin32ErrorIfFailed(
+                ReadConsoleOutputCharacter(hConsoleOutput, lpCharacter, nLength, dwReadCoord, out lpNumberOfCharsRead));
+
+            return lpCharacter.ToString();
+        }
         
         /// <summary>
         /// Moves a block of data in a screen buffer. The effects of the move can be limited by specifying a clipping
@@ -1024,6 +1501,27 @@ namespace WinApiNet.Console
             SafeConsoleHandle hConsoleOutput,
             ConsoleDisplayMode dwFlags,
             out Coord lpNewScreenBufferDimensions);
+
+        /// <summary>
+        /// Sets the display mode of the specified console screen buffer.
+        /// </summary>
+        /// <param name="hConsoleOutput">
+        /// [in] A handle to the console screen buffer.
+        /// </param>
+        /// <param name="dwFlags">
+        /// [in] The display mode of the console.
+        /// </param>
+        /// <returns>
+        /// A <see cref="Coord"/> structure that receives the new dimensions of the screen buffer, in characters.
+        /// </returns>
+        public static Coord SetConsoleDisplayMode(SafeConsoleHandle hConsoleOutput, ConsoleDisplayMode dwFlags)
+        {
+            Coord lpNewScreenBufferDimensions;
+            WinError.ThrowLastWin32ErrorIfFailed(
+                SetConsoleDisplayMode(hConsoleOutput, dwFlags, out lpNewScreenBufferDimensions));
+
+            return lpNewScreenBufferDimensions;
+        }
 
         /// <summary>
         /// Sets the history settings for the calling process's console.
@@ -1242,7 +1740,7 @@ namespace WinApiNet.Console
         /// [out] A pointer to a variable that receives the number of characters actually written.
         /// </param>
         /// <param name="lpReserved">
-        /// Reserved; must be <c>null</c>.
+        /// Reserved; must be <see cref="IntPtr.Zero"/>.
         /// </param>
         /// <returns>
         /// If the function succeeds, the return value is <c>true</c>. If the function fails, the return value is
@@ -1256,6 +1754,30 @@ namespace WinApiNet.Console
             uint nNumberOfCharsToWrite,
             out uint lpNumberOfCharsWritten,
             IntPtr lpReserved);
+
+        /// <summary>
+        /// Writes a character string to a console screen buffer beginning at the current cursor location.
+        /// </summary>
+        /// <param name="hConsoleOutput">
+        /// [in] A handle to the console screen buffer. The handle must have the <see cref="ConsoleAccess.GENERIC_WRITE"/>
+        /// access right.
+        /// </param>
+        /// <param name="lpBuffer">
+        /// [in] A pointer to a buffer that contains characters to be written to the console screen buffer.
+        /// </param>
+        /// <param name="nNumberOfCharsToWrite">
+        /// [in] The number of characters to be written. If the total size of the specified number of characters
+        /// exceeds the available heap, the function fails with <see cref="ERROR_NOT_ENOUGH_MEMORY"/>.
+        /// </param>
+        /// <returns>The number of characters actually written.</returns>
+        public static uint WriteConsole(SafeConsoleHandle hConsoleOutput, string lpBuffer, uint nNumberOfCharsToWrite)
+        {
+            uint lpNumberOfCharsWritten;
+            WinError.ThrowLastWin32ErrorIfFailed(
+                WriteConsole(hConsoleOutput, lpBuffer, nNumberOfCharsToWrite, out lpNumberOfCharsWritten, IntPtr.Zero));
+
+            return lpNumberOfCharsWritten;
+        }
 
         /// <summary>
         /// Writes data directly to the console input buffer.
@@ -1285,6 +1807,30 @@ namespace WinApiNet.Console
             InputRecord[] lpBuffer,
             uint nLength,
             out uint lpNumberOfEventsWritten);
+
+        /// <summary>
+        /// Writes data directly to the console input buffer.
+        /// </summary>
+        /// <param name="hConsoleInput">
+        /// [in] A handle to the console input buffer. The handle must have the <see cref="ConsoleAccess.GENERIC_WRITE"/>
+        /// access right. 
+        /// </param>
+        /// <param name="lpBuffer">
+        /// [in] A pointer to an array of <see cref="InputRecord"/> structures that contain data to be written to the
+        /// input buffer.
+        /// </param>
+        /// <param name="nLength">
+        /// [in] The number of input records to be written.
+        /// </param>
+        /// <returns>The number of input records actually written.</returns>
+        public static uint WriteConsoleInput(SafeConsoleHandle hConsoleInput, InputRecord[] lpBuffer, uint nLength)
+        {
+            uint lpNumberOfEventsWritten;
+            WinError.ThrowLastWin32ErrorIfFailed(
+                WriteConsoleInput(hConsoleInput, lpBuffer, nLength, out lpNumberOfEventsWritten));
+
+            return lpNumberOfEventsWritten;
+        }
 
         /// <summary>
         /// Writes character and color attribute data to a specified rectangular block of character cells in a console
@@ -1363,6 +1909,38 @@ namespace WinApiNet.Console
             out uint lpNumberOfAttrsWritten);
 
         /// <summary>
+        /// Copies a number of character attributes to consecutive cells of a console screen buffer, beginning at a
+        /// specified location.
+        /// </summary>
+        /// <param name="hConsoleOutput">
+        /// [in] A handle to the console screen buffer. The handle must have the <see cref="ConsoleAccess.GENERIC_WRITE"/>
+        /// access right.
+        /// </param>
+        /// <param name="lpAttribute">
+        /// [in] The attributes to be used when writing to the console screen buffer.
+        /// </param>
+        /// <param name="nLength">
+        /// [in] The number of screen buffer character cells to which the attributes will be copied.
+        /// </param>
+        /// <param name="dwWriteCoord">
+        /// [in] A <see cref="Coord"/> structure that specifies the character coordinates of the first cell in the
+        /// console screen buffer to which the attributes will be written.
+        /// </param>
+        /// <returns>The number of attributes actually written to the console screen buffer.</returns>
+        public static uint WriteConsoleOutputAttribute(
+            SafeConsoleHandle hConsoleOutput,
+            CharacterAttributes[] lpAttribute,
+            uint nLength,
+            Coord dwWriteCoord)
+        {
+            uint lpNumberOfAttrsWritten;
+            WinError.ThrowLastWin32ErrorIfFailed(
+                WriteConsoleOutputAttribute(hConsoleOutput, lpAttribute, nLength, dwWriteCoord, out lpNumberOfAttrsWritten));
+
+            return lpNumberOfAttrsWritten;
+        }
+
+        /// <summary>
         /// Copies a number of characters to consecutive cells of a console screen buffer, beginning at a specified location.
         /// </summary>
         /// <param name="hConsoleOutput">
@@ -1394,5 +1972,36 @@ namespace WinApiNet.Console
             uint nLength,
             Coord dwWriteCoord,
             out uint lpNumberOfCharsWritten);
+
+        /// <summary>
+        /// Copies a number of characters to consecutive cells of a console screen buffer, beginning at a specified location.
+        /// </summary>
+        /// <param name="hConsoleOutput">
+        /// [in] A handle to the console screen buffer. The handle must have the <see cref="ConsoleAccess.GENERIC_WRITE"/>
+        /// access right.
+        /// </param>
+        /// <param name="lpCharacter">
+        /// [in] The characters to be written to the console screen buffer.
+        /// </param>
+        /// <param name="nLength">
+        /// [in] The number of characters to be written.
+        /// </param>
+        /// <param name="dwWriteCoord">
+        /// [in] A <see cref="Coord"/> structure that specifies the character coordinates of the first cell in the
+        /// console screen buffer to which characters will be written.
+        /// </param>
+        /// <returns>The number of characters actually written.</returns>
+        public static uint WriteConsoleOutputCharacter(
+            SafeConsoleHandle hConsoleOutput,
+            string lpCharacter,
+            uint nLength,
+            Coord dwWriteCoord)
+        {
+            uint lpNumberOfCharsWritten;
+            WinError.ThrowLastWin32ErrorIfFailed(
+                WriteConsoleOutputCharacter(hConsoleOutput, lpCharacter, nLength, dwWriteCoord, out lpNumberOfCharsWritten));
+
+            return lpNumberOfCharsWritten;
+        }
     }
 }
