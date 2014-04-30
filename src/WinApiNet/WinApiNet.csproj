@@ -46,6 +46,7 @@
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
+    <Compile Include="WinAtom.cs" />
     <Compile Include="Console\CharacterAttributes.cs" />
     <Compile Include="Console\CharInfo.cs" />
     <Compile Include="Console\ColorRef.cs" />

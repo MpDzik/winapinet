@@ -31,6 +31,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="AtomTests.cs" />
     <Compile Include="ConsoleTests.cs" />
     <Compile Include="ErrorHandlingTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
