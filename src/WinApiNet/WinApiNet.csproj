@@ -46,6 +46,9 @@
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
+    <Compile Include="Clipboard\ClipboardFormat.cs" />
+    <Compile Include="Clipboard\ClipboardMessages.cs" />
+    <Compile Include="Clipboard\WinClipboard.cs" />
     <Compile Include="WinAtom.cs" />
     <Compile Include="Console\CharacterAttributes.cs" />
     <Compile Include="Console\CharInfo.cs" />
