@@ -10,7 +10,7 @@ namespace WinApiNet.Tests
     using System.Diagnostics;
     using System.Text;
     using NUnit.Framework;
-    using WinApiNet.Console;
+    using WinApiNet.Shell.Console;
 
     [TestFixture]
     public class ConsoleTests

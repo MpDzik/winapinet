@@ -11,7 +11,7 @@ namespace WinApiNet.Tests
     using System.Runtime.InteropServices;
     using System.Text;
     using NUnit.Framework;
-    using WinApiNet.ErrorHandling;
+    using WinApiNet.Diagnostics;
 
     [TestFixture]
     public class ErrorHandlingTests

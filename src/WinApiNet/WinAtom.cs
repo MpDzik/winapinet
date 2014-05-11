@@ -8,7 +8,7 @@ namespace WinApiNet
 {
     using System.Runtime.InteropServices;
     using System.Text;
-    using WinApiNet.ErrorHandling;
+    using WinApiNet.Diagnostics;
 
     /// <summary>
     /// Implements wrappers for WINAPI functions for managing atom tables.

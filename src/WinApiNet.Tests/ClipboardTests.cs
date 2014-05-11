@@ -11,8 +11,8 @@ namespace WinApiNet.Tests
     using System.Linq;
     using System.Runtime.InteropServices;
     using NUnit.Framework;
-    using WinApiNet.Clipboard;
-    using WinApiNet.ErrorHandling;
+    using WinApiNet.Data.Clipboard;
+    using WinApiNet.Diagnostics;
 
     [TestFixture]
     public class ClipboardTests
