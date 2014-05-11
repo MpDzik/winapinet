@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="WinAtom.cs" company="WinAPI.NET">
-//   Copyright (c) Marek Dzikiewicz, All Rights Reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace WinApiNet
+﻿namespace WinApiNet
 {
     using System.Runtime.InteropServices;
     using System.Text;

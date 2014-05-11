@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ConsoleFontFamily.cs" company="WinAPI.NET">
-//   Copyright (c) Marek Dzikiewicz, All Rights Reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace WinApiNet.Shell.Console
+﻿namespace WinApiNet.Shell.Console
 {
     using System.Diagnostics.CodeAnalysis;
 

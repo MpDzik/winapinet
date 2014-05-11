@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AssemblyInfo.cs" company="WinAPI.NET">
-//   Copyright (c) Marek Dzikiewicz, All Rights Reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-using System;
+﻿using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
 

@@ -94,7 +94,9 @@
     <Compile Include="Diagnostics\MessageBeepType.cs" />
     <Compile Include="Diagnostics\ProcessErrorMode.cs" />
     <Compile Include="Diagnostics\WinError.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="GlobalSuppressions.cs">
+      <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
+    </Compile>
     <Compile Include="Handles\DuplicateHandleOptions.cs" />
     <Compile Include="Handles\HandleFlags.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

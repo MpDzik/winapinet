@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SafeTokenHandle.cs" company="WinAPI.NET">
-//   Copyright (c) Marek Dzikiewicz, All Rights Reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace WinApiNet.Handles
+﻿namespace WinApiNet.Handles
 {
     using System;
     using System.Security;

@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ExceptionRecord.cs" company="WinAPI.NET">
-//   Copyright (c) Marek Dzikiewicz, All Rights Reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace WinApiNet.Diagnostics
+﻿namespace WinApiNet.Diagnostics
 {
     using System;
     using System.Diagnostics.CodeAnalysis;

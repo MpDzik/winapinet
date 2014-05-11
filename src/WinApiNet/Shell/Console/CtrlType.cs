@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CtrlType.cs" company="WinAPI.NET">
-//   Copyright (c) Marek Dzikiewicz, All Rights Reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace WinApiNet.Shell.Console
+﻿namespace WinApiNet.Shell.Console
 {
     /// <summary>
     /// Enumerated type for the control messages sent to the handler routine

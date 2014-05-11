@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ClipboardFormat.cs" company="WinAPI.NET">
-//   Copyright (c) Marek Dzikiewicz, All Rights Reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace WinApiNet.Data.Clipboard
+﻿namespace WinApiNet.Data.Clipboard
 {
     /// <summary>
     /// Defines standard clipboard formats (formats defined by the system).

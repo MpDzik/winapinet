@@ -1,9 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ReadConsoleControl.cs" company="WinAPI.NET">
-//   Copyright (c) Marek Dzikiewicz, All Rights Reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
 namespace WinApiNet.Shell.Console
 {
     using System.Runtime.InteropServices;

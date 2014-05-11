@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="HandlerRoutine.cs" company="WinAPI.NET">
-//   Copyright (c) Marek Dzikiewicz, All Rights Reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace WinApiNet.Shell.Console
+﻿namespace WinApiNet.Shell.Console
 {
     /// <summary>
     /// An application-defined function used with the <see cref="WinConsole.SetConsoleCtrlHandler"/> function.
