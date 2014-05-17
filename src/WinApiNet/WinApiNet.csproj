@@ -35,9 +35,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
-  </PropertyGroup>
-  <PropertyGroup>
-    <AssemblyOriginatorKeyFile>..\WinAPI.NET.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\WinAPI.NET.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
@@ -146,9 +144,10 @@
     <Compile Include="Handles\WinHandle.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\WinAPI.NET.pfx">
-      <Link>WinAPI.NET.pfx</Link>
-    </None>
+    <ProjectReference Include="..\WinApiNet.Native\WinApiNet.Native.vcxproj">
+      <Project>{525f1c57-3a58-435f-b8c0-37103e8397e9}</Project>
+      <Name>WinApiNet.Native</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

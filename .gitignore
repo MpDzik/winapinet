@@ -9,3 +9,7 @@ obj
 TestResults
 TestResult.xml
 StyleCop.Cache
+*.opensdf
+*.sdf
+WinApiNetLib.log
+*.lastbuildstate
