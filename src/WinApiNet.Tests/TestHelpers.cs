@@ -51,7 +51,7 @@
                 object value;
                 try
                 {
-                    value = propertyInfo.GetValue(obj);
+                    value = propertyInfo.GetValue(obj, new object[0]);
                 }
                 catch (Exception ex)
                 {
