@@ -87,6 +87,8 @@
     <Compile Include="Data\Clipboard\ClipboardFormat.cs" />
     <Compile Include="Data\Clipboard\ClipboardMessages.cs" />
     <Compile Include="Data\Clipboard\WinClipboard.cs" />
+    <Compile Include="Shell\PathFlags.cs" />
+    <Compile Include="Shell\WinPath.cs" />
     <Compile Include="WinAtom.cs" />
     <Compile Include="Shell\Console\CharacterAttributes.cs" />
     <Compile Include="Shell\Console\CharInfo.cs" />

@@ -79,6 +79,7 @@
     <Compile Include="WinHandleTests.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="WinPathTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="nunit.framework">
