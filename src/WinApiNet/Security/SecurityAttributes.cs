@@ -2,15 +2,15 @@
 {
     using System;
     using System.Runtime.InteropServices;
-    using System.Security.Permissions;
-
+    using System.Security;
+    
     /// <summary>
     /// The <see cref="SecurityAttributes"/> structure contains the security descriptor for an object and specifies
     /// whether the handle retrieved by specifying this structure is inheritable. This structure provides security
     /// settings for objects created by various functions.
     /// </summary>
+    [SecurityCritical]
     [StructLayout(LayoutKind.Sequential)]
-    [PermissionSet(SecurityAction.LinkDemand, Name = "FullTrust")]
     public class SecurityAttributes
     {
         private int _nLength = Marshal.SizeOf(typeof(SecurityAttributes));
