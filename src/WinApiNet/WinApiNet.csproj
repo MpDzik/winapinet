@@ -142,6 +142,7 @@
     <Compile Include="Security\SecurityAttributes.cs" />
     <Compile Include="WinBoolean.cs" />
     <Compile Include="Handles\WinHandle.cs" />
+    <Compile Include="WinConst.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\WinApiNet.Native\WinApiNet.Native.vcxproj">
