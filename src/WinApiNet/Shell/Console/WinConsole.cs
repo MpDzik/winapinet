@@ -198,7 +198,7 @@
         /// If the function succeeds, the return value is <c>true</c>. If the function fails, the return value is
         /// <c>false</c>. To get extended error information, call <see cref="Marshal.GetLastWin32Error"/>.
         /// </returns>
-        [DllImport("kernel32.dll", SetLastError = true)]
+        [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool FillConsoleOutputCharacter(
             SafeConsoleHandle hConsoleOutput,
@@ -414,7 +414,7 @@
         /// The size of the buffer required to store the names of all executable files that have console aliases
         /// defined, in bytes.
         /// </returns>
-        [DllImport("kernel32.dll")]
+        [DllImport("kernel32.dll", CharSet = CharSet.Unicode)]
         public static extern uint GetConsoleAliasExesLength();
 
         /// <summary>
@@ -1021,7 +1021,7 @@
         /// If the function succeeds, the return value is <c>true</c>. If the function fails, the return value is
         /// <c>false</c>. To get extended error information, call <see cref="Marshal.GetLastWin32Error"/>.
         /// </returns>
-        [DllImport("kernel32.dll", SetLastError = true)]
+        [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool PeekConsoleInput(
             SafeConsoleHandle hConsoleInput,
@@ -1202,7 +1202,7 @@
         /// If the function succeeds, the return value is <c>true</c>. If the function fails, the return value is
         /// <c>false</c>. To get extended error information, call <see cref="Marshal.GetLastWin32Error"/>.
         /// </returns>
-        [DllImport("kernel32.dll", SetLastError = true)]
+        [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool ReadConsoleOutput(
             SafeConsoleHandle hConsoleOutput,
@@ -1371,7 +1371,7 @@
         /// If the function succeeds, the return value is <c>true</c>. If the function fails, the return value is
         /// <c>false</c>. To get extended error information, call <see cref="Marshal.GetLastWin32Error"/>.
         /// </returns>
-        [DllImport("kernel32.dll", SetLastError = true)]
+        [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool ScrollConsoleScreenBuffer(
             SafeConsoleHandle hConsoleOutput,
