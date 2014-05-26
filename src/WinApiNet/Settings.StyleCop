@@ -2,8 +2,10 @@
   <GlobalSettings>
     <CollectionProperty Name="RecognizedWords">
       <Value>alertable</Value>
+      <Value>deallocate</Value>
       <Value>sans-serifed</Value>
       <Value>serifed</Value>
+      <Value>subtree</Value>
     </CollectionProperty>
   </GlobalSettings>
   <Analyzers>

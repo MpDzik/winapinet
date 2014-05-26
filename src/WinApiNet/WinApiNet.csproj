@@ -87,6 +87,12 @@
     <Compile Include="Data\Clipboard\ClipboardFormat.cs" />
     <Compile Include="Data\Clipboard\ClipboardMessages.cs" />
     <Compile Include="Data\Clipboard\WinClipboard.cs" />
+    <Compile Include="IO\FileAction.cs" />
+    <Compile Include="IO\FileIoCompletionRoutine.cs" />
+    <Compile Include="IO\FileNotificationHandle.cs" />
+    <Compile Include="IO\FileNotifyFilter.cs" />
+    <Compile Include="IO\FileNotifyInformation.cs" />
+    <Compile Include="IO\WinDirectory.cs" />
     <Compile Include="Shell\PathFlags.cs" />
     <Compile Include="Shell\WinPath.cs" />
     <Compile Include="WinAtom.cs" />

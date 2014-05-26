@@ -76,6 +76,7 @@
     <Compile Include="ErrorHandlingTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestHelpers.cs" />
+    <Compile Include="WinDirectoryTests.cs" />
     <Compile Include="WinHandleTests.cs">
       <SubType>Code</SubType>
     </Compile>
