@@ -8,6 +8,9 @@
     /// <summary>
     /// Implements wrappers for error handling-related APIs.
     /// </summary>
+#if SUPPRESS_CAS
+    [System.Security.SuppressUnmanagedCodeSecurity]
+#endif
     public static class WinError
     {
         /// <summary>

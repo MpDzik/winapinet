@@ -11,6 +11,9 @@
     /// <summary>
     /// Provides wrappers for directory management Windows API.
     /// </summary>
+#if SUPPRESS_CAS
+    [System.Security.SuppressUnmanagedCodeSecurity]
+#endif
     public static class WinDirectory
     {
         /// <summary>

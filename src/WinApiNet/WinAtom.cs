@@ -7,6 +7,9 @@
     /// <summary>
     /// Implements wrappers for WINAPI functions for managing atom tables.
     /// </summary>
+#if SUPPRESS_CAS
+    [System.Security.SuppressUnmanagedCodeSecurity]
+#endif
     public static class WinAtom
     {
         /// <summary>
